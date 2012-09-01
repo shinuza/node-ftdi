@@ -159,7 +159,7 @@ Handle<Value> NodeFtdi::Write(const Arguments& args) {
     const char* data = NULL;
     int length = 0;
 
-    if (args.Length() < 1 || !args[0]->IsString() || !Buffer::HasInstance(args[0])) {
+    if (args.Length() < 1 || (!args[0]->IsString() && !Buffer::HasInstance(args[0]))) {
         return NodeFtdi::ThrowTypeError("Ftdi.write() expects a string or a Buffer");
     }
 
