@@ -1,5 +1,6 @@
 #include <v8.h>
 #include <node.h>
+#include <node_buffer.h>
 #include <ftdi.h>
 
 using namespace v8;
