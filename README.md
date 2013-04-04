@@ -39,3 +39,11 @@ Note: Somehow description makes open() fail
 ## Class methods
 
 `Array` **Ftdi.findAll([vid [,pid]])**
+
+# Setup
+
+## Mac OS X
+
+	brew install libftdi
+	node-waf configure
+	node-waf
