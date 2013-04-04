@@ -156,13 +156,23 @@ Handle<Value> NodeFtdi::SetBitmode(const Arguments& args) {
 }
 
 Handle<Value> NodeFtdi::Write(const Arguments& args) {
-    if (args.Length() < 1 || !args[0]->IsString()) {
-        return NodeFtdi::ThrowTypeError("Ftdi.write() expects a string");
+    const char* data = NULL;
+    int length = 0;
+
+    if (args.Length() < 1 || (!args[0]->IsString() && !Buffer::HasInstance(args[0]))) {
+        return NodeFtdi::ThrowTypeError("Ftdi.write() expects a string or a Buffer");
     }
 
-    std::string str(*String::Utf8Value(args[0]));
+    if (args[0]->IsString()) {
+        std::string str(*String::Utf8Value(args[0]));
+        data   = str.c_str();
+        length = str.size();
+    } else {
+        data   = Buffer::Data(args[0]->ToObject());
+        length = Buffer::Length(args[0]->ToObject());
+    }
 
-    int ret = ftdi_write_data(&ftdic, (unsigned char*) str.c_str(), str.size());
+    int ret = ftdi_write_data(&ftdic, (unsigned char*) data, length);
     if(ret < 0) {
         return NodeFtdi::ThrowLastError("Unable to write to device: ");
     }
